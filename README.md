@@ -5,20 +5,17 @@ This repository contains all code and scripts used to implement the two-step dee
 - Image Filtering: Preselect tiles likely to contain seamounts using CNN feature extraction + clustering
 - Seamount Detection: Train and apply a U-Net segmentation model to those candidate tiles
 
+Scripts Overview:
 
-├── filtering/
-│   ├── 0_run_all.py
-│   ├── 1_segment_images.py
-│   ├── 2_extractFeatureVectors_VGG16.py
-│   ├── 3_extractFeatureVectors_ResNet50.py
-│   ├── 4_extractFeatureVectors_InceptionV3.py
-│   ├── 5_extractFeatureVectors_MobileNetV2.py
-│   ├── 6_kmeans_clustering.py
-│   └── 7_agglo_clustering.py
-│
-└── seamount_detection/
-    ├── 1_recalculate_coordinates.py
-    ├── 2_image_creation.py
-    ├── 3_train_unet.py
-    ├── 4_apply_model.py
+filtering/
+0_run_all.py: Orchestrates the full filtering workflow
+1_segment_images.py: Reads raw XYZ/CSV, segments into chunks
+2–5_extractFeatureVectors_*.py: Generate feature vectors with four CNN backbones
+6_kmeans_clustering.py: Cluster tiles using K-means (k=10)
+7_agglo_clustering.py: (Optional) Hierarchical clustering for comparison
 
+seamount_detection/
+1_recalculate_coordinates.py: Convert raw UTM coordinates to lon/lat
+2_image_creation.py: Interpolate each chunk, normalize, tile, and apply augmentation
+3_train_unet.py: Define, tune, and train the U-Net segmentation model
+4_apply_model.py: Load trained model and generate seamount segmentation on new data
